@@ -31,13 +31,14 @@ public class Rota {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    @JsonIgnore
     private Usuario usuario;
 
     @OneToMany(mappedBy = "rota")
+    @JsonIgnore
     private List<Alerta> alertas;
 
     @OneToMany(mappedBy = "rota")
+    @JsonIgnore
     private List<Transporte> transportes;
 
     public int getId() {

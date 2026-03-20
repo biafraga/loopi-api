@@ -23,7 +23,6 @@ public class Alerta {
 
     @ManyToOne
     @JoinColumn(name = "rota_id", nullable = false)
-    @JsonIgnore
     private Rota rota;
 
     public int getId() {

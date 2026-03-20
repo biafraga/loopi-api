@@ -22,6 +22,7 @@ public class Usuario {
     private int status;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
     private List<Rota> rotas;
 
     public List<Rota> getRotas() {
