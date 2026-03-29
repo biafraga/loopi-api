@@ -2,11 +2,15 @@ package com.senac.loopi.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "rota")
+@Getter
+@Setter
 public class Rota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,99 +45,4 @@ public class Rota {
     @JsonIgnore
     private List<Transporte> transportes;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getApelido() {
-        return apelido;
-    }
-
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
-    }
-
-    public String getOrigem() {
-        return origem;
-    }
-
-    public void setOrigem(String origem) {
-        this.origem = origem;
-    }
-
-    public String getDestino() {
-        return destino;
-    }
-
-    public void setDestino(String destino) {
-        this.destino = destino;
-    }
-
-    public Float getLatitudeOrigem() {
-        return latitudeOrigem;
-    }
-
-    public void setLatitudeOrigem(Float latitudeOrigem) {
-        this.latitudeOrigem = latitudeOrigem;
-    }
-
-    public Float getLongitudeOrigem() {
-        return longitudeOrigem;
-    }
-
-    public void setLongitudeOrigem(Float longitudeOrigem) {
-        this.longitudeOrigem = longitudeOrigem;
-    }
-
-    public Float getLatitudeDestino() {
-        return latitudeDestino;
-    }
-
-    public void setLatitudeDestino(Float latitudeDestino) {
-        this.latitudeDestino = latitudeDestino;
-    }
-
-    public Float getLongitudeDestino() {
-        return longitudeDestino;
-    }
-
-    public void setLongitudeDestino(Float longitudeDestino) {
-        this.longitudeDestino = longitudeDestino;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public List<Alerta> getAlertas() {
-        return alertas;
-    }
-
-    public void setAlertas(List<Alerta> alertas) {
-        this.alertas = alertas;
-    }
-
-    public List<Transporte> getTransportes() {
-        return transportes;
-    }
-
-    public void setTransportes(List<Transporte> transportes) {
-        this.transportes = transportes;
-    }
 }

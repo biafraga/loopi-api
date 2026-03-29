@@ -2,9 +2,13 @@ package com.senac.loopi.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "transporte")
+@Getter
+@Setter
 public class Transporte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,35 +23,5 @@ public class Transporte {
     @JoinColumn(name = "rota_id", nullable = false)
     private Rota rota;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Rota getRota() {
-        return rota;
-    }
-
-    public void setRota(Rota rota) {
-        this.rota = rota;
-    }
 }
