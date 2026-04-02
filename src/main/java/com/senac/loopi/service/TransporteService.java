@@ -1,6 +1,6 @@
 package com.senac.loopi.service;
 
-import com.senac.loopi.entity.Transporte;
+import com.senac.loopi.model.transporte.Transporte;
 import com.senac.loopi.repository.TransporteRepository;
 import org.springframework.stereotype.Service;
 

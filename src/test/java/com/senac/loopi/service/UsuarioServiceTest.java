@@ -1,6 +1,6 @@
 package com.senac.loopi.service;
 
-import com.senac.loopi.entity.Usuario;
+import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

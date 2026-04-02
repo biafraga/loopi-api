@@ -1,6 +1,6 @@
 package com.senac.loopi.controller;
 
-import com.senac.loopi.entity.Alerta;
+import com.senac.loopi.model.alerta.Alerta;
 import com.senac.loopi.service.AlertaService;
 import org.springframework.web.bind.annotation.*;
 

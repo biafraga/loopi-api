@@ -1,6 +1,6 @@
 package com.senac.loopi.service;
 
-import com.senac.loopi.entity.Usuario;
+import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,9 @@ public class UsuarioService {
     }
 
     //Deletar usuário
-    public void deletarUsuario(int id){
-        usuarioRepository.deleteById(id);
+    public void deletarUsuario(Integer id){
+        Usuario usuario = obterUsuarioPeloId(id);
+        usuario.setStatus(0);
+        usuarioRepository.save(usuario);
     }
 }

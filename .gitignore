@@ -1,0 +1,3 @@
+#Ignorando configurações com senhas/tokens
+src/main/resources/application.properties
+target/

@@ -1,6 +1,9 @@
-package com.senac.loopi.entity;
+package com.senac.loopi.model.rota;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.senac.loopi.model.alerta.Alerta;
+import com.senac.loopi.model.transporte.Transporte;
+import com.senac.loopi.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

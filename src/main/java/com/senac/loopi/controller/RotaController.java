@@ -1,6 +1,6 @@
 package com.senac.loopi.controller;
 
-import com.senac.loopi.entity.Rota;
+import com.senac.loopi.model.rota.Rota;
 import com.senac.loopi.service.RotaService;
 import org.springframework.web.bind.annotation.*;
 

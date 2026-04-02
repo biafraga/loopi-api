@@ -1,5 +1,6 @@
 package com.senac.loopi.entity;
 
+import com.senac.loopi.model.usuario.Usuario;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

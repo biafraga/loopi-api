@@ -1,6 +1,6 @@
 package com.senac.loopi.service;
 
-import com.senac.loopi.entity.Rota;
+import com.senac.loopi.model.rota.Rota;
 import com.senac.loopi.repository.RotaRepository;
 import org.springframework.stereotype.Service;
 

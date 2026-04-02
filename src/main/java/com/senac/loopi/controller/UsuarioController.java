@@ -1,44 +1,77 @@
 package com.senac.loopi.controller;
 
-import com.senac.loopi.entity.Usuario;
+import com.senac.loopi.model.usuario.DadosAtualizacaoUsuario;
+import com.senac.loopi.model.usuario.DadosCadastroUsuario;
+import com.senac.loopi.model.usuario.DadosDetalhamentoUsuario;
+import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
     private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService){
-        this.usuarioService = usuarioService;
-    }
-
     // GET /api/usuarios
     @GetMapping
-    public List<Usuario> listarUsuarios(){
-        return usuarioService.listarUsuarios();
+    public List<DadosDetalhamentoUsuario> listarUsuarios(){
+        return usuarioService.listarUsuarios()
+                .stream()// Transforma a lista numa "esteira de fábrica"
+                .map(DadosDetalhamentoUsuario::new) // Passa cada usuário pelo nosso filtro do DTO
+                .toList(); // Junta tudo numa lista nova e segura
+     // O .stream, .map e .toList pega a lista cheia de senhas, passa um por um no DTO, e devolve uma lista limpa
     }
 
     // GET /api/usuarios/1
     @GetMapping("/{id}")
-    public Usuario obterUsuarioPeloId(@PathVariable Integer id){
-        return usuarioService.obterUsuarioPeloId(id);
+    public DadosDetalhamentoUsuario obterUsuarioPeloId(@PathVariable Integer id){
+        Usuario usuario = usuarioService.obterUsuarioPeloId(id);
+
+        return new DadosDetalhamentoUsuario(usuario);
     }
 
     //POST /api/usuarios
     @PostMapping
-    public Usuario adicionarUsuario(@RequestBody Usuario usuario){
-        return usuarioService.salvarUsuario(usuario);
+    public DadosDetalhamentoUsuario adicionarUsuario(@RequestBody DadosCadastroUsuario dados){
+        // Entidade 'Usuario' vazia para receber os dados
+        Usuario novoUsuario = new Usuario();
+
+        // Copiamos os dados autorizados do DTO para a Entidade
+        // Lembrando: no Record, não usamos "get", chamamos o atributo direto com parênteses
+        novoUsuario.setNome(dados.nome());
+        novoUsuario.setEmail(dados.email());
+        novoUsuario.setSenha(dados.senha());
+
+        novoUsuario.setStatus(1); // Todo usuário novo nasce com status 1 (Ativo)
+
+        Usuario usuarioSalvo = usuarioService.salvarUsuario(novoUsuario);
+
+        return new DadosDetalhamentoUsuario(usuarioSalvo);
     }
 
     // PUT /api/usuarios/1
     @PutMapping("/{id}")
-    public Usuario atualizarUsuario(@PathVariable Integer id, @RequestBody Usuario usuario){
-        // vai garantir que o ID da URL seja setado no objeto antes de salvar
-        usuario.setId(id);
-        return usuarioService.salvarUsuario(usuario);
+    public DadosDetalhamentoUsuario atualizarUsuario
+    (@PathVariable Integer id, @RequestBody DadosAtualizacaoUsuario dados){
+        // Primeiro vamos buscar no banco o usuário que já existe pelo ID
+        Usuario usuarioExistente = usuarioService.obterUsuarioPeloId(id);
+
+        // dados novos que vieram do DTO
+        usuarioExistente.setNome(dados.nome());
+        usuarioExistente.setEmail(dados.email());
+        usuarioExistente.setSenha(dados.senha());
+        // Obs: a gente NÃO mexe no status nem no ID. Eles continuam intactos no banco!
+
+        //Mandamos salvar essa atualização
+        Usuario usuarioAtualizado = usuarioService.salvarUsuario(usuarioExistente);
+
+        //Devolvemos os dados para a tela usando nosso filtro que esconde a senha
+        return new DadosDetalhamentoUsuario(usuarioAtualizado);
+
     }
 
     // DELETE /api/usuarios/1

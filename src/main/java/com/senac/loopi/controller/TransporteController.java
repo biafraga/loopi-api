@@ -1,6 +1,6 @@
 package com.senac.loopi.controller;
 
-import com.senac.loopi.entity.Transporte;
+import com.senac.loopi.model.transporte.Transporte;
 import com.senac.loopi.service.TransporteService;
 import org.springframework.web.bind.annotation.*;
 

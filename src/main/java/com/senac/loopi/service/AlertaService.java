@@ -1,6 +1,6 @@
 package com.senac.loopi.service;
 
-import com.senac.loopi.entity.Alerta;
+import com.senac.loopi.model.alerta.Alerta;
 import com.senac.loopi.repository.AlertaRepository;
 import org.springframework.stereotype.Service;
 
