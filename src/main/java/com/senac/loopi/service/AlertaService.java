@@ -2,17 +2,15 @@ package com.senac.loopi.service;
 
 import com.senac.loopi.model.alerta.Alerta;
 import com.senac.loopi.repository.AlertaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AlertaService {
     private final AlertaRepository alertaRepository;
-
-    public AlertaService (AlertaRepository alertaRepository){
-        this.alertaRepository = alertaRepository;
-    }
 
     //Criar ou alterar alerta
     public Alerta salvarAlerta(Alerta alerta){
@@ -29,8 +27,12 @@ public class AlertaService {
         return alertaRepository.findById(id).orElse(null);
     }
 
-    //Deletar alerta
-    public void deletarAlerta(int id){
-        alertaRepository.deleteById(id);
+    //Soft delete
+    public void deletarAlerta(Integer id){
+        Alerta alerta = obterAlertaPeloId(id);
+        if (alerta != null) {
+            alerta.setStatus(0); // inativo
+            alertaRepository.save(alerta);
+        }
     }
 }

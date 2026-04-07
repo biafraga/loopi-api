@@ -2,17 +2,15 @@ package com.senac.loopi.service;
 
 import com.senac.loopi.model.rota.Rota;
 import com.senac.loopi.repository.RotaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RotaService {
     private final RotaRepository rotaRepository;
-
-    public RotaService (RotaRepository rotaRepository){
-        this.rotaRepository = rotaRepository;
-    }
 
     //Criar ou alterar rota
     public Rota salvarRota(Rota rota){
@@ -29,8 +27,12 @@ public class RotaService {
         return rotaRepository.findById(id).orElse(null);
     }
 
-    //Deletar rota
-    public void deletarRota(int id){
-        rotaRepository.deleteById(id);
+    //Soft delete
+    public void deletarRota(Integer id){
+        Rota rota = obterRotaPeloId(id);
+        if (rota != null){
+            rota.setStatus(0); //inativo
+            rotaRepository.save(rota);
+        }
     }
 }
