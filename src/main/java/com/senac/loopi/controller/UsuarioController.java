@@ -5,6 +5,7 @@ import com.senac.loopi.model.usuario.DadosCadastroUsuario;
 import com.senac.loopi.model.usuario.DadosDetalhamentoUsuario;
 import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class UsuarioController {
 
     //POST /api/usuarios
     @PostMapping
-    public DadosDetalhamentoUsuario adicionarUsuario(@RequestBody DadosCadastroUsuario dados){
+    public DadosDetalhamentoUsuario adicionarUsuario(@RequestBody @Valid DadosCadastroUsuario dados){
         // Entidade 'Usuario' vazia para receber os dados
         Usuario novoUsuario = new Usuario();
 
