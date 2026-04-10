@@ -7,6 +7,7 @@ import com.senac.loopi.model.transporte.DadosDetalhamentoTransporte;
 import com.senac.loopi.model.transporte.Transporte;
 import com.senac.loopi.service.RotaService;
 import com.senac.loopi.service.TransporteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class TransporteController {
 
     //POST /api/transportes
     @PostMapping
-    public DadosDetalhamentoTransporte adicionarTransporte(@RequestBody DadosCadastroTransporte dados){
+    public DadosDetalhamentoTransporte adicionarTransporte(@RequestBody @Valid DadosCadastroTransporte dados){
         Transporte novoTransporte = new Transporte();
         novoTransporte.setTipo(dados.tipo());
         novoTransporte.setStatus(1); // Nasce ativo
@@ -51,7 +52,7 @@ public class TransporteController {
 
     // PUT /api/transportes/
     @PutMapping("/{id}")
-    public DadosDetalhamentoTransporte atualizarTransporte(@PathVariable Integer id, @RequestBody DadosAtualizacaoTransporte dados){
+    public DadosDetalhamentoTransporte atualizarTransporte(@PathVariable Integer id, @RequestBody @Valid DadosAtualizacaoTransporte dados){
         Transporte transporteExistente = transporteService.obterTransportePeloId(id);
 
         transporteExistente.setTipo(dados.tipo());

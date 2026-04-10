@@ -8,10 +8,18 @@ public record DadosDetalhamentoAlerta(
         String diasSemana,
         int antecedenciaMinutos,
         int status,
-        Integer rotaId
+        Integer rotaId,
+        LocalDateTime horarioNotificacao
 ) {
     public DadosDetalhamentoAlerta(Alerta alerta){
-        this(alerta.getId(), alerta.getHorarioChegada(), alerta.getDiasSemana(),
-                alerta.getAntecedenciaMinutos(), alerta.getStatus(), alerta.getRota().getId());
+        this(
+                alerta.getId(),
+                alerta.getHorarioChegada(),
+                alerta.getDiasSemana(),
+                alerta.getAntecedenciaMinutos(),
+                alerta.getStatus(),
+                alerta.getRota().getId(),
+                alerta.getHorarioNotificacao()
+        );
     }
 }

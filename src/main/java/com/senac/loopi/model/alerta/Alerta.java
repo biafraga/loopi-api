@@ -24,6 +24,8 @@ public class Alerta {
     private int antecedenciaMinutos;
     @Column(name = "alerta_status", nullable = false)
     private int status;
+    @Column(name = "alerta_horario_notificacao")
+    private LocalDateTime horarioNotificacao;
 
     @ManyToOne
     @JoinColumn(name = "rota_id", nullable = false)

@@ -7,6 +7,7 @@ import com.senac.loopi.model.rota.Rota;
 import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.service.RotaService;
 import com.senac.loopi.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class RotaController {
 
     //POST /api/rotas
     @PostMapping
-    public DadosDetalhamentoRota adicionarRota(@RequestBody DadosCadastroRota dados){
+    public DadosDetalhamentoRota adicionarRota(@RequestBody @Valid DadosCadastroRota dados){
         Rota novaRota = new Rota();
         novaRota.setApelido(dados.apelido());
         novaRota.setOrigem(dados.origem());
@@ -57,7 +58,7 @@ public class RotaController {
 
     // PUT /api/rotas/1
     @PutMapping("/{id}")
-    public DadosDetalhamentoRota atualizarRota(@PathVariable Integer id, @RequestBody DadosAtualizacaoRota dados){
+    public DadosDetalhamentoRota atualizarRota(@PathVariable Integer id, @RequestBody @Valid DadosAtualizacaoRota dados){
         Rota rotaExistente = rotaService.obterRotaPeloId(id);
 
         rotaExistente.setApelido(dados.apelido());

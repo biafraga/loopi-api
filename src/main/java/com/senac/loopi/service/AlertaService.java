@@ -5,6 +5,8 @@ import com.senac.loopi.repository.AlertaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,4 +37,19 @@ public class AlertaService {
             alertaRepository.save(alerta);
         }
     }
+
+    //Calcula a hora de sair de casa baseado no Mapbox
+    public LocalDateTime calcularHoraDaNotificacao(Alerta alerta, double segundosMapbox){
+        // Transforma os segundos do Mapbox em um formato de tempo do Java
+        Duration tempoDeViagem = Duration.ofSeconds((long) segundosMapbox);
+
+        // Pega os minutos de antecedência que o usuário cadastrou no alerta
+        Duration tempoParaSeArrumar = Duration.ofMinutes(alerta.getAntecedenciaMinutos());
+
+        // Hora de chegada - tempo de viagem - tempo de se arrumar
+        return alerta.getHorarioChegada()
+                .minus(tempoDeViagem)
+                .minus(tempoParaSeArrumar);
+    }
+
 }
