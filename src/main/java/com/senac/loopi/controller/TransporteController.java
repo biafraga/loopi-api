@@ -42,8 +42,13 @@ public class TransporteController {
         novoTransporte.setTipo(dados.tipo());
         novoTransporte.setStatus(1); // Nasce ativo
 
-        // Busca a rota no banco e amarra ao transporte
+        // Busca a rota no banco
         Rota rota = rotaService.obterRotaPeloId(dados.rotaId());
+        if (rota == null) {
+            throw new RuntimeException("Erro: Essa rota não existe no banco de dados!");
+        }
+
+        // Amarra ao transporte
         novoTransporte.setRota(rota);
 
         Transporte transporteSalvo = transporteService.salvarTransporte(novoTransporte);

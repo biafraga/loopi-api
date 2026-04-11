@@ -35,4 +35,31 @@ public class TransporteService {
             transporteRepository.save(transporte);
         }
     }
+
+    // Busca qual transporte está amarrado a essa rota
+    public Transporte obterTransportePelaRotaId(Integer rotaId) {
+        // Usa o método que você vai criar no Repository no próximo passo
+        return transporteRepository.findByRotaId(rotaId).stream().findFirst().orElse(null);
+    }
+
+    // O Tradutor Inteligente
+    public String traduzirTipoParaMapbox(String tipoBrasileiro) {
+        if (tipoBrasileiro == null) return "driving"; // Prevenção de erro
+
+        String tipo = tipoBrasileiro.toLowerCase().trim();
+
+        if (tipo.contains("pé") || tipo.contains("andando") || tipo.contains("caminhada")) {
+            return "walking";
+        }
+        else if (tipo.contains("bicicleta") || tipo.contains("bike")) {
+            return "cycling";
+        }
+        else {
+            // Aqui caem: Carro, Uber, Ônibus, Van, Metrô, Trem, Barca...
+            // LIMITAÇÃO DO MVP: O Mapbox só entende rotas de asfalto (driving).
+            // Estamos usando isso como uma aproximação de tempo para que a
+            // matemática do Alerta funcione, cientes de que trilhos e mar têm tempos diferentes.
+            return "driving";
+        }
+    }
 }

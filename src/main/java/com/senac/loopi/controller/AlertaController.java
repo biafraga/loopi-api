@@ -6,9 +6,11 @@ import com.senac.loopi.model.alerta.DadosCadastroAlerta;
 import com.senac.loopi.model.alerta.DadosDetalhamentoAlerta;
 import com.senac.loopi.model.rota.DadosRotaMapbox;
 import com.senac.loopi.model.rota.Rota;
+import com.senac.loopi.model.transporte.Transporte;
 import com.senac.loopi.service.AlertaService;
 import com.senac.loopi.service.GeocodingService;
 import com.senac.loopi.service.RotaService;
+import com.senac.loopi.service.TransporteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ public class AlertaController {
     private final AlertaService alertaService;
     private final RotaService rotaService; // Precisamos para achar a rota do alerta
     private final GeocodingService geocodingService;
+    private final TransporteService transporteService;
 
     // GET /api/alertas
     @GetMapping
@@ -48,11 +51,19 @@ public class AlertaController {
             throw new RuntimeException("Rota não encontrada!");
         }
 
-        // Pergunta pro Mapbox o tempo da viagem (Temporariamente como "driving")
+        // Busca o transporte e traduz
+        Transporte transporteDaRota = transporteService.obterTransportePelaRotaId(rota.getId());
+        String perfilMapbox = "driving"; // Valor padrão caso não tenha transporte
+
+        if (transporteDaRota != null) {
+            perfilMapbox = transporteService.traduzirTipoParaMapbox(transporteDaRota.getTipo());
+        }
+
+        // Pergunta pro Mapbox passando o perfil traduzido ("walking", "cycling", etc)
         DadosRotaMapbox mapboxInfo = geocodingService.obterTempoEDistancia(
                 rota.getLatitudeOrigem(), rota.getLongitudeOrigem(),
                 rota.getLatitudeDestino(), rota.getLongitudeDestino(),
-                "driving"
+                perfilMapbox // <-- Tchau "driving" fixo, olá perfil dinâmico!
         );
 
         // Monta o Alerta base
@@ -63,7 +74,7 @@ public class AlertaController {
         novoAlerta.setStatus(1);
         novoAlerta.setRota(rota);
 
-        // Calcula a hora exata do despertador e salva no objeto!
+        // Calcula a hora exata do despertador e salva no objeto
         if (mapboxInfo != null) {
             LocalDateTime horaCalculada = alertaService.calcularHoraDaNotificacao(novoAlerta, mapboxInfo.duracaoSegundos());
             novoAlerta.setHorarioNotificacao(horaCalculada);
