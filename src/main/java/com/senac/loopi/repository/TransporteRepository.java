@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TransporteRepository extends JpaRepository<Transporte, Integer> {
     List<Transporte> findByRotaId(Integer rotaId);
+
+    List<Transporte> findByStatus(int status);
 }

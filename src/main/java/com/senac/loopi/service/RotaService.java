@@ -19,7 +19,7 @@ public class RotaService {
 
     //Listar rotas
     public List<Rota> listarRotas(){
-        return rotaRepository.findAll();
+        return rotaRepository.findByStatus(1);
     }
 
     // Procurar rotas pelo Id

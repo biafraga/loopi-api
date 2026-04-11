@@ -22,7 +22,7 @@ public class UsuarioService {
 
     //Listar usuários
     public List<Usuario> listarUsuarios(){
-        return usuarioRepository.findAll();
+        return usuarioRepository.findByStatus(1);
     }
 
     //Procurar usuário pelo Id

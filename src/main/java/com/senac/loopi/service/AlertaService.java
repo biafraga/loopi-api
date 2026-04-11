@@ -21,7 +21,7 @@ public class AlertaService {
 
     // Listar alertas
     public List<Alerta> listarAlertas(){
-        return alertaRepository.findAll();
+        return alertaRepository.findByStatus(1);
     }
 
     //Procurar alerta por Id

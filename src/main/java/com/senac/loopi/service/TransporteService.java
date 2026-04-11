@@ -19,7 +19,7 @@ public class TransporteService {
 
     // listar transportes
     public List<Transporte> listarTransportes(){
-        return transporteRepository.findAll();
+        return transporteRepository.findByStatus(1);
     }
 
     //procurar transporte pelo id
