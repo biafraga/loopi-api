@@ -4,11 +4,12 @@ import com.senac.loopi.model.alerta.Alerta;
 import com.senac.loopi.repository.AlertaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class AlertaService {
     }
 
     // Listar alertas
-    public List<Alerta> listarAlertas(){
-        return alertaRepository.findByStatus(1);
+    public Page<Alerta> listarAlertas(Pageable pageable){
+        return alertaRepository.findByStatus(1, pageable);
     }
 
     //Procurar alerta por Id

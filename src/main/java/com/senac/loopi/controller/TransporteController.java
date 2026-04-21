@@ -9,6 +9,10 @@ import com.senac.loopi.service.RotaService;
 import com.senac.loopi.service.TransporteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +26,12 @@ public class TransporteController {
 
     // GET /api/transportes
     @GetMapping
-    public List<DadosDetalhamentoTransporte> listarTransportes(){
-        return transporteService.listarTransportes().stream()
-                .map(DadosDetalhamentoTransporte::new)
-                .toList();
+    public ResponseEntity<Page<DadosDetalhamentoTransporte>> listarTransporte(
+            @PageableDefault(size = 10, sort = {"tipo"}) Pageable paginacao){
+        Page<DadosDetalhamentoTransporte> page = transporteService.listarTransportes(paginacao)
+                .map(DadosDetalhamentoTransporte::new);
+
+        return ResponseEntity.ok(page);
     }
 
     // GET /api/transportes/1

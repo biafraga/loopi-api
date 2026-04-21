@@ -4,9 +4,9 @@ import com.senac.loopi.model.rota.Rota;
 import com.senac.loopi.repository.RotaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,8 @@ public class RotaService {
     }
 
     //Listar rotas
-    public List<Rota> listarRotas(){
-        return rotaRepository.findByStatus(1);
+    public Page<Rota> listarRotas(Pageable pageable){
+        return rotaRepository.findByStatus(1, pageable);
     }
 
     // Procurar rotas pelo Id

@@ -4,6 +4,8 @@ import com.senac.loopi.model.transporte.Transporte;
 import com.senac.loopi.repository.TransporteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class TransporteService {
     }
 
     // listar transportes
-    public List<Transporte> listarTransportes(){
-        return transporteRepository.findByStatus(1);
+    public Page<Transporte> listarTransportes(Pageable pageable){
+        return transporteRepository.findByStatus(1, pageable);
     }
 
     //procurar transporte pelo id

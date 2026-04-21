@@ -13,10 +13,14 @@ import com.senac.loopi.service.RotaService;
 import com.senac.loopi.service.TransporteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/api/alertas")
@@ -29,10 +33,12 @@ public class AlertaController {
 
     // GET /api/alertas
     @GetMapping
-    public List<DadosDetalhamentoAlerta> listarAlertas(){
-        return alertaService.listarAlertas().stream()
-                .map(DadosDetalhamentoAlerta::new)
-                .toList();
+    public ResponseEntity<Page<DadosDetalhamentoAlerta>> listarAlertas(
+            @PageableDefault(size = 10, sort = {"horarioChegada"}) Pageable paginacao){
+        Page<DadosDetalhamentoAlerta> page = alertaService.listarAlertas(paginacao)
+                .map(DadosDetalhamentoAlerta::new);
+
+        return ResponseEntity.ok(page);
     }
 
     // GET /api/alertas/1

@@ -9,9 +9,11 @@ import com.senac.loopi.service.RotaService;
 import com.senac.loopi.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/rotas")
@@ -22,11 +24,14 @@ public class RotaController {
 
     // GET /api/rotas
     @GetMapping
-    public List<DadosDetalhamentoRota> listarRotas(){
-        return rotaService.listarRotas().stream()
-                .map(DadosDetalhamentoRota::new)
-                .toList();
+    public ResponseEntity<Page<DadosDetalhamentoRota>> listarRotas(
+            @PageableDefault(size = 10, sort = {"apelido"}) Pageable paginacao){
+        Page<DadosDetalhamentoRota> page = rotaService.listarRotas(paginacao)
+                .map(DadosDetalhamentoRota::new);
+
+        return ResponseEntity.ok(page);
     }
+
 
     // GET /api/rotas/1
     @GetMapping("/{id}")
