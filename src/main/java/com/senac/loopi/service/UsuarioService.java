@@ -2,9 +2,10 @@ package com.senac.loopi.service;
 
 import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -15,14 +16,15 @@ public class UsuarioService {
     }
 
     //Criar ou alterar usuário
+    @Transactional
     public Usuario salvarUsuario(Usuario usuario){
         // Antes do save, faremos: usuario.setSenha(senhaCriptografada);
         return usuarioRepository.save(usuario);
     }
 
     //Listar usuários
-    public List<Usuario> listarUsuarios(){
-        return usuarioRepository.findByStatus(1);
+    public Page<Usuario> listarUsuarios(Pageable pageable){
+        return usuarioRepository.findByStatus(1, pageable);
     }
 
     //Procurar usuário pelo Id
@@ -31,9 +33,12 @@ public class UsuarioService {
     }
 
     //Deletar usuário
+    @Transactional
     public void deletarUsuario(Integer id){
         Usuario usuario = obterUsuarioPeloId(id);
-        usuario.setStatus(0);
-        usuarioRepository.save(usuario);
+        if (usuario != null){
+            usuario.setStatus(0);
+            usuarioRepository.save(usuario);
+        }
     }
 }

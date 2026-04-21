@@ -2,6 +2,7 @@ package com.senac.loopi.service;
 
 import com.senac.loopi.model.transporte.Transporte;
 import com.senac.loopi.repository.TransporteRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ public class TransporteService {
     private final TransporteRepository transporteRepository;
 
     //criar ou alterar transporte
+    @Transactional
     public Transporte salvarTransporte(Transporte transporte){
         return transporteRepository.save(transporte);
     }
@@ -28,6 +30,7 @@ public class TransporteService {
     }
 
     //soft delete
+    @Transactional
     public void deletarTransporte(Integer id){
         Transporte transporte = obterTransportePeloId(id);
         if (transporte != null) {

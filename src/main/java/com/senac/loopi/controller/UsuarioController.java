@@ -7,6 +7,10 @@ import com.senac.loopi.model.usuario.Usuario;
 import com.senac.loopi.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +23,12 @@ public class UsuarioController {
 
     // GET /api/usuarios
     @GetMapping
-    public List<DadosDetalhamentoUsuario> listarUsuarios(){
-        return usuarioService.listarUsuarios()
-                .stream()// Transforma a lista numa "esteira de fábrica"
-                .map(DadosDetalhamentoUsuario::new) // Passa cada usuário pelo nosso filtro do DTO
-                .toList(); // Junta tudo numa lista nova e segura
-     // O .stream, .map e .toList pega a lista cheia de senhas, passa um por um no DTO, e devolve uma lista limpa
+    public ResponseEntity<Page<DadosDetalhamentoUsuario>> listarUsuarios(
+            @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
+        Page<DadosDetalhamentoUsuario> page = usuarioService.listarUsuarios(paginacao)
+                .map(DadosDetalhamentoUsuario::new);
+
+        return ResponseEntity.ok(page);
     }
 
     // GET /api/usuarios/1
