@@ -1,11 +1,16 @@
 package com.senac.loopi.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.senac.loopi.model.rota.DadosRotaMapbox;
+import com.senac.loopi.model.rota.DadosSugestaoEndereco;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GeocodingService {
@@ -77,5 +82,56 @@ public class GeocodingService {
             System.err.println("Erro na chamada do Mapbox (Rotas): " + e.getMessage());
         }
         return null;
+    }
+
+    // ========================================================================
+    // MÉTODO 3: Busca Sugestões de Endereço (Autocomplete) com Proximidade
+    // ========================================================================
+    public List<DadosSugestaoEndereco> buscarSugestoesDeEndereco(String busca) {
+        List<DadosSugestaoEndereco> sugestoes = new ArrayList<>();
+
+        if (busca == null || busca.trim().isEmpty()) {
+            return sugestoes;
+        }
+
+        try {
+            // A "Cerca" invisível ao redor da Região Metropolitana do Rio de Janeiro
+            // Formato: minLongitude, minLatitude, maxLongitude, maxLatitude
+            String bboxRio = "-43.80,-23.10,-43.00,-22.70";
+
+            // Trocamos o proximity pelo bbox!
+            String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/{busca}.json?access_token={token}&autocomplete=true&country=br&bbox={caixa}&limit=2";
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            // Passamos as variáveis na ordem exata: busca, token, bboxRio
+            String response = restTemplate.getForObject(
+                    url,
+                    String.class,
+                    busca,
+                    mapboxToken,
+                    bboxRio
+            );
+
+            if (response != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(response);
+
+                JsonNode features = root.path("features");
+
+                for (JsonNode feature : features) {
+                    String id = feature.path("id").asText();
+                    String title = feature.path("text").asText(); // Nome principal
+
+                    String subtitle = feature.path("place_name").asText().replace(title + ", ", "");
+
+                    sugestoes.add(new DadosSugestaoEndereco(id, title, subtitle));
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar sugestões no Mapbox: " + e.getMessage());
+        }
+
+        return sugestoes;
     }
 }
